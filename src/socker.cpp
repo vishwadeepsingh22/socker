@@ -12,7 +12,7 @@
 
 using namespace std;
 
-string name = "Vishwadeep Singh";
+string name = "Vishwadeep";
 
 int main(void) {
 	puts("Hello World!!!");
