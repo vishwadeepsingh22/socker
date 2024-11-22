@@ -297,23 +297,23 @@ int main(void) {
 	#define FLIP_BIT(num, pos) ((num) ^= (1U << (pos)))
 	// Macro to check if a bit at position `pos` is set (returns true/false)
 	#define IS_BIT_SET(num, pos) (((num) & (1U << (pos))) != 0)
-    unsigned int num = 0b00001010; // Binary: 1010 (decimal: 10)
+	unsigned int num = 0b00001010; // Binary: 1010 (decimal: 10)
 
-    // Set bit at position 1
-    SET_BIT(num, 1); // num becomes 1011 (decimal: 11)
-    std::cout << "After setting bit 1: " << std::bitset<8>(num) << std::endl;
+	// Set bit at position 1
+	SET_BIT(num, 1); // num becomes 1011 (decimal: 11)
+	std::cout << "After setting bit 1: " << std::bitset<8>(num) << std::endl;
 
-    // Clear bit at position 3
-    CLEAR_BIT(num, 3); // num becomes 0011 (decimal: 3)
-    std::cout << "After clearing bit 3: " << std::bitset<8>(num) << std::endl;
+	// Clear bit at position 3
+	CLEAR_BIT(num, 3); // num becomes 0011 (decimal: 3)
+	std::cout << "After clearing bit 3: " << std::bitset<8>(num) << std::endl;
 
-    // Flip bit at position 2
-    FLIP_BIT(num, 2); // num becomes 0001 (decimal: 1)
-    std::cout << "After flipping bit 2: " << std::bitset<8>(num) << std::endl;
+	// Flip bit at position 2
+	FLIP_BIT(num, 2); // num becomes 0001 (decimal: 1)
+	std::cout << "After flipping bit 2: " << std::bitset<8>(num) << std::endl;
 
-    // Check if bit at position 0 is set
-    bool isSet = IS_BIT_SET(num, 0); // Returns true (1 is set at position 0)
-    std::cout << "Is bit 0 set? " << (isSet ? "Yes" : "No") << std::endl;
+	// Check if bit at position 0 is set
+	bool isSet = IS_BIT_SET(num, 0); // Returns true (1 is set at position 0)
+	std::cout << "Is bit 0 set? " << (isSet ? "Yes" : "No") << std::endl;
 
 
 	/*
