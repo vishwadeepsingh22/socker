@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <bitset>
+
 
 using namespace std;
 
@@ -97,6 +99,8 @@ int main(void) {
 	*/
 
 	// Bitwise operator
+	// MSB: Most Significant Bit (Leftest Bit)
+	// LSB: Least Significant Bit (Righest Bit)
 	int xb = 10; // 1010
 	int yb = 11; // 1011
 
@@ -148,7 +152,7 @@ int main(void) {
 	// Setting up a particular bit
 	// example: 5 (0101) setting up 2nd bit (index 1, counting from right side) to 1 means it should be 0111 (number: 7)
 	// int a = 5;  // Binary: 0101
-    // int position = 1;  // We want to set the 2nd bit (index 1)
+	// int position = 1;  // We want to set the 2nd bit (index 1)
 	// EQUATION -
 	// a |= (1 << position);
 	// explanations:
@@ -159,11 +163,11 @@ int main(void) {
 	//      OR  0010
 	// Result:  0111
 
-    int number = 5; // Example number in binary: 0101
-    int n = 1;       // Example: bit position 3 (starting from 0 RHS)
-    cout << "Initial number: " << number << endl;
-    print_binary(number, 16);  // Print number in binary
-    cout << "Setting bit: " << n << endl;
+	int number = 5; // Example number in binary: 0101
+	int n = 1;       // Example: bit position 3 (starting from 0 RHS)
+	cout << "Initial number: " << number << endl;
+	print_binary(number, 16);  // Print number in binary
+	cout << "Setting bit: " << n << endl;
 	number = bit_set(number, n);
 	cout << "Number after setting bit: " << number << endl;
 	print_binary(number, 16);
@@ -248,33 +252,85 @@ int main(void) {
 	// settings |= FEATURE_A;  // Enable FEATURE_A
 	// settings &= ~FEATURE_B; // Disable FEATURE_B
 
-	// Extract particular Range of bits
+	// Loop for each bit in reverse order
+	number = 6; // 0110
+	while (number) {
+		if (number & 1) {
+			cout << "1" << endl;
+		} else {
+			cout << "0" << endl;
+		}
+		number >>= 1;  // Shift right to check the next bit
+	}
+	// Loop for each bit from left to right
+	// find the bitsize and from 0 till end loop and check each bit is set or not
 
+	// Counting Set Bits (Hamming Weight)
+	// Way 1 - Loop through bits and count all the set bits
+	// Way 2 -
+	//  int number = 5; 0101
+	//	int count = 0;
+	//	while (number) {
+	//		// below statment means
+	//		// number = number & (number -1);
+	//		number &= (number - 1); // Remove the lowest set bit
+	//		count++;
+	//	}
+	// 	return count;
+	// example: number = 5; /0101
+	// iteration 1
+	//     number = number & (number -1)
+	//     number = 5 & (5-1);
+	//     number = 0101 & 0100; // hence number = 0100
+	// iteration 2
+	//     number = number & (number -1)
+	//     number = 4 & (4-1);
+	//     number = 0100 & 0011; // hence number = 0000
+	// 2 iterations, means total hamming weight = 2;
 
+	// write #define for bit operations set, flip, clear, check, count, loop
+	// Macro to set a bit at position `pos` in a number
+	#define SET_BIT(num, pos) ((num) |= (1U << (pos)))
+	// Macro to clear a bit at position `pos` in a number
+	#define CLEAR_BIT(num, pos) ((num) &= ~(1U << (pos)))
+	// Macro to toggle (flip) a bit at position `pos` in a number
+	#define FLIP_BIT(num, pos) ((num) ^= (1U << (pos)))
+	// Macro to check if a bit at position `pos` is set (returns true/false)
+	#define IS_BIT_SET(num, pos) (((num) & (1U << (pos))) != 0)
+    unsigned int num = 0b00001010; // Binary: 1010 (decimal: 10)
+
+    // Set bit at position 1
+    SET_BIT(num, 1); // num becomes 1011 (decimal: 11)
+    std::cout << "After setting bit 1: " << std::bitset<8>(num) << std::endl;
+
+    // Clear bit at position 3
+    CLEAR_BIT(num, 3); // num becomes 0011 (decimal: 3)
+    std::cout << "After clearing bit 3: " << std::bitset<8>(num) << std::endl;
+
+    // Flip bit at position 2
+    FLIP_BIT(num, 2); // num becomes 0001 (decimal: 1)
+    std::cout << "After flipping bit 2: " << std::bitset<8>(num) << std::endl;
+
+    // Check if bit at position 0 is set
+    bool isSet = IS_BIT_SET(num, 0); // Returns true (1 is set at position 0)
+    std::cout << "Is bit 0 set? " << (isSet ? "Yes" : "No") << std::endl;
 
 
 	/*
-	 * Common Applications of Bitwise Operations
-	Flags and Bitfields: Bitwise operations are often used to manage flags and settings where each bit represents a boolean value (e.g., whether a feature is enabled or disabled).
-		#define FEATURE_A 0x01  // 00000001
-		#define FEATURE_B 0x02  // 00000010
+	 * Other Common Applications of Bitwise Operations
+		Efficient Multiplication and Division by Powers of 2: Left shifts are equivalent to multiplying by powers of 2, and right shifts are equivalent to dividing by powers of 2.
+			int value = 10;
+			value = value << 3;  // Multiply by 8 (2^3), value = 80
+			value = value >> 2;  // Divide by 4 (2^2), value = 20
+		Extracting Multiple Bits (Masking): You can use bitwise operations to extract multiple bits from a number.
+			int value = 0b11011010;
+			int extracted = (value >> 2) & 0b111;  // Extract the 3 middle bits, result = 110
 
-		int settings = 0;  // No features enabled
-		settings |= FEATURE_A;  // Enable FEATURE_A
-		settings &= ~FEATURE_B; // Disable FEATURE_B
-	Efficient Multiplication and Division by Powers of 2: Left shifts are equivalent to multiplying by powers of 2, and right shifts are equivalent to dividing by powers of 2.
-		int value = 10;
-		value = value << 3;  // Multiply by 8 (2^3), value = 80
-		value = value >> 2;  // Divide by 4 (2^2), value = 20
-	Extracting Multiple Bits (Masking): You can use bitwise operations to extract multiple bits from a number.
-		int value = 0b11011010;
-		int extracted = (value >> 2) & 0b111;  // Extract the 3 middle bits, result = 110
-
-	 Practical Example: Let's say you're working with a 32-bit integer, and you want to extract the highest 8 bits:
-		int num = 0x12345678;  // Binary: 00010010001101000101011001111000
-		int mask = 0xFF000000;  // Mask to isolate the highest 8 bits: 11111111000000000000000000000000
-		int result = (num & mask) >> 24;  // Shift the highest 8 bits to the least significant part
-		cout << "The highest 8 bits: " << hex << result << endl;  // Output: 12
+		Practical Example: Let's say you're working with a 32-bit integer, and you want to extract the highest 8 bits:
+			int num = 0x12345678;  // Binary: 00010010001101000101011001111000
+			int mask = 0xFF000000;  // Mask to isolate the highest 8 bits: 11111111000000000000000000000000
+			int result = (num & mask) >> 24;  // Shift the highest 8 bits to the least significant part
+			cout << "The highest 8 bits: " << hex << result << endl;  // Output: 12
 	 * */
 
 	return 0;
