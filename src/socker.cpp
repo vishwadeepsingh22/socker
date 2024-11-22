@@ -7,6 +7,7 @@
 //============================================================================
 
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
@@ -27,6 +28,36 @@ int x = 5, y = 6, z = 7; // multiple variable declaration
 // should be different from c++ keywords
 
 const int cx = 100; // this cant be changed and when defined, value must be assigned
+
+void print_binary(int number, int total_bits) {
+	cout << "(";
+    for (int i = total_bits - 1; i >= 0; i--) {
+        printf("%lu", (number >> i) & 1);
+    }
+    cout << ")" << endl;
+}
+
+int bit_set(int number, int n) {
+    return number | (1 << n);
+}
+
+int bit_clear(int n, int k) {
+	return (n & (~(1 << (k))));
+}
+
+int bit_toggle(int number, int n) {
+    return number ^ (1 << n);
+}
+
+bool is_bit_set(int n, int k) {
+	print_binary(n,16);
+	if (n & (1 << k)) {
+		cout << "INDEX: " << k << " is SET!" << endl;
+		return true;
+	}
+	cout << "INDEX: " << k << " is NOT SET!" << endl;
+	return false;
+}
 
 int main(void) {
 	cout << "Hello World " << name << "!!" << endl;
@@ -112,6 +143,114 @@ int main(void) {
 	// 2. Clear a Bit
 	// 3. toggle a bit
 	// 4. Check if particular bit is set
+
+	
+	// Setting up a particular bit
+	// example: 5 (0101) setting up 2nd bit (index 1, counting from right side) to 1 means it should be 0111 (number: 7)
+	// int a = 5;  // Binary: 0101
+    // int position = 1;  // We want to set the 2nd bit (index 1)
+	// EQUATION -
+	// a |= (1 << position);
+	// explanations:
+	// (1 << position): This is for masking
+	// 0001 << 2: This will result: 0100
+	// OR between 0101 (5) | 0100 (Mask)
+	//          0101
+	//      OR  0010
+	// Result:  0111
+
+    int number = 5; // Example number in binary: 0101
+    int n = 1;       // Example: bit position 3 (starting from 0 RHS)
+    cout << "Initial number: " << number << endl;
+    print_binary(number, 16);  // Print number in binary
+    cout << "Setting bit: " << n << endl;
+	number = bit_set(number, n);
+	cout << "Number after setting bit: " << number << endl;
+	print_binary(number, 16);
+
+	// Clearing up the bit
+	// Example:
+	// number = 5 (0101)
+	// updating the 2nd postion from right side (using 0th position) with clearing a bit (means set to 0)
+	// it should change to 0001
+	// position = 2
+	// EQUATION -
+	// n & ( ~ (1 << position) );
+	// explanations:
+	// (1 << position): This is for masking
+	// 0001 << 2: This will result: 0100
+	// ~ (0100) will result to 1011
+	// AND between 0101 (5) & 1011 (~Mask)
+	//          0101
+	//     AND  1011
+	// Result:  0001
+
+	number = 5;
+	n = 2;
+	cout << "Initial number: " << number << endl;
+	print_binary(number, 16);  // Print number in binary
+	cout << "Clearing bit: " << n << endl;
+	number = bit_clear(number, n);
+	cout << "Number after clearing bit: " << number << endl;
+	print_binary(number, 16);
+
+	// Toggle a bit
+	// Example:
+	// number = 5 (0101)
+	// updating the 1st postion from right side (using 0th position) with clearing a bit (means set to 0)
+	// it should change to 0111
+	// position = 1
+	// EQUATION -
+	// n ^ (1 << position);
+	// explanations:
+	// (1 << position): This is for masking
+	// 0001 << 1: This will result: 0010
+	// XOR between 0101 (5) ^ 0010 (Mask)
+	//          0101
+	//     XOR  0010
+	// Result:  0111
+
+	number = 5;
+	n = 1;
+	cout << "Initial number: " << number << endl;
+	print_binary(number, 16);  // Print number in binary
+	cout << "Toggle bit: " << n << endl;
+	number = bit_toggle(number, n);
+	cout << "Number after toggle bit: " << number << endl;
+	print_binary(number, 16);
+
+	// Check a bit is set or not
+	// Example:
+	// number = 5 (0101)
+	// check if 1st postion from right side (using 0th position) is 1 or not
+	// here it is false
+	// position = 1
+	// EQUATION -
+	// n & (1 << position);
+	// explanations:
+	// (1 << position): This is for masking
+	// 0001 << 1: This will result: 0010
+	// AND between 0101 (5) & 0010 (Mask)
+	//          0101
+	//     AND  0010
+	// Result:  0000 --> false
+
+	number = 5; // (0101)
+	is_bit_set(number, 0); // true
+	is_bit_set(number, 1); // false
+	is_bit_set(number, 2); // true
+	is_bit_set(number, 3); // false
+
+	// Efficiently Setting up a feature to Enable OR Disable
+	// #define FEATURE_A 0x01  // 00000001
+	// #define FEATURE_B 0x02  // 00000010
+	// int settings = 0;  // No features enabled
+	// settings |= FEATURE_A;  // Enable FEATURE_A
+	// settings &= ~FEATURE_B; // Disable FEATURE_B
+
+	// Extract particular Range of bits
+
+
 
 
 	/*
